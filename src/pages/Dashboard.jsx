@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import API from "../utils/api";
 import ComplaintCard from "../components/ComplaintCard";
-import { Box, Grid, Typography, Paper } from "@mui/material";
+import { Box, Typography, Paper } from "@mui/material";
 
 export default function Dashboard() {
   const [complaints, setComplaints] = useState([]);
@@ -28,22 +28,13 @@ export default function Dashboard() {
         pb: 8,
       }}
     >
-      <Box
-        sx={{
-          maxWidth: "1400px",
-          mx: "auto",
-        }}
-      >
+      <Box sx={{ maxWidth: "1400px", mx: "auto" }}>
         <Typography
           variant="h4"
-          component="h2"
           align="center"
-          gutterBottom
-          sx={{
-            fontWeight: "bold",
-            mb: 6,
-            color: "success.main",
-          }}
+          fontWeight="bold"
+          color="success.main"
+          mb={6}
         >
           My Complaints
         </Typography>
@@ -68,29 +59,23 @@ export default function Dashboard() {
             </Paper>
           </Box>
         ) : (
-          <Grid
-            container
-            spacing={4}
-            justifyContent="center"
-            alignItems="stretch"
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: {
+                xs: "1fr",
+                sm: "1fr 1fr",
+                md: "1fr 1fr 1fr",
+                lg: "1fr 1fr 1fr 1fr",
+              },
+              gap: 3,
+              alignItems: "stretch", // ✅ ensures all cards stretch evenly
+            }}
           >
             {complaints.map((c) => (
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                lg={3}
-                key={c._id}
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <ComplaintCard data={c} />
-              </Grid>
+              <ComplaintCard key={c._id} data={c} />
             ))}
-          </Grid>
+          </Box>
         )}
       </Box>
     </Box>

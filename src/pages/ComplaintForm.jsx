@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import API from "../utils/api";
 import { useNavigate } from "react-router-dom";
 import {
@@ -17,9 +17,22 @@ export default function ComplaintForm() {
   const [form, setForm] = useState({
     title: "",
     description: "",
-    category: "other",
+    category: "",
   });
+  const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await API.get("/categories");
+        setCategories(res.data);
+      } catch (err) {
+        console.error("Error fetching categories", err);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,30 +49,25 @@ export default function ComplaintForm() {
   return (
     <Box
       sx={{
-        minHeight: "100vh",
+        height: { xs: "calc(100vh - 56px)", sm: "calc(100vh - 64px)" },
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         bgcolor: "#eef2f6",
-        p: 2,
+        overflow: "hidden",
       }}
     >
       <Paper
         elevation={6}
         sx={{
-          p: 5,
+          p: { xs: 3, sm: 5 },
           borderRadius: 4,
           maxWidth: 550,
           width: "100%",
           textAlign: "center",
         }}
       >
-        <Typography
-          variant="h4"
-          color="primary"
-          fontWeight="bold"
-          mb={3}
-        >
+        <Typography variant="h4" color="primary" fontWeight="bold" mb={3}>
           🧾 Register a New Complaint
         </Typography>
 
@@ -90,12 +98,13 @@ export default function ComplaintForm() {
               value={form.category}
               label="Category"
               onChange={(e) => setForm({ ...form, category: e.target.value })}
+              required
             >
-              <MenuItem value="plumbing">🚰 Plumbing</MenuItem>
-              <MenuItem value="electricity">💡 Electricity</MenuItem>
-              <MenuItem value="cleaning">🧹 Cleaning</MenuItem>
-              <MenuItem value="water">🚿 Water</MenuItem>
-              <MenuItem value="other">📋 Other</MenuItem>
+              {categories.map((cat) => (
+                <MenuItem key={cat._id} value={cat._id}>
+                  {cat.name}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
 

@@ -27,18 +27,30 @@ export default function Navbar() {
   const handleMenuClose = () => setAnchorEl(null);
 
   return (
-    <AppBar position="fixed">
+    <AppBar position="fixed" color="primary" sx={{ zIndex: 1201 }}>
       <Toolbar>
-        <Typography variant="h6" sx={{ flexGrow: 1 }}>
+        <Typography
+          variant="h6"
+          sx={{
+            flexGrow: 1,
+            fontWeight: "bold",
+            letterSpacing: 0.5,
+          }}
+        >
           Hostel Complaint System
         </Typography>
 
         {/* Desktop navigation */}
         <Box sx={{ display: { xs: "none", md: "flex" }, gap: 2 }}>
           {user?.role === "admin" ? (
-            <Button color="inherit" component={RouterLink} to="/admin">
-              Admin Dashboard
-            </Button>
+            <>
+              <Button color="inherit" component={RouterLink} to="/admin">
+                Admin Dashboard
+              </Button>
+              <Button color="inherit" component={RouterLink} to="/admin/categories">
+                Manage Categories
+              </Button>
+            </>
           ) : (
             <>
               <Button color="inherit" component={RouterLink} to="/">
@@ -49,6 +61,7 @@ export default function Navbar() {
               </Button>
             </>
           )}
+
           <Button
             color="error"
             variant="contained"
@@ -66,15 +79,28 @@ export default function Navbar() {
         </Box>
 
         {/* Mobile dropdown menu */}
-        <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleMenuClose}
+        >
           {user?.role === "admin" ? (
-            <MenuItem
-              component={RouterLink}
-              to="/admin"
-              onClick={handleMenuClose}
-            >
-              Admin Dashboard
-            </MenuItem>
+            <>
+              <MenuItem
+                component={RouterLink}
+                to="/admin"
+                onClick={handleMenuClose}
+              >
+                Admin Dashboard
+              </MenuItem>
+              <MenuItem
+                component={RouterLink}
+                to="/admin/categories"
+                onClick={handleMenuClose}
+              >
+                Manage Categories
+              </MenuItem>
+            </>
           ) : (
             <>
               <MenuItem
@@ -93,6 +119,7 @@ export default function Navbar() {
               </MenuItem>
             </>
           )}
+
           <MenuItem
             onClick={() => {
               handleLogout();
